@@ -15,7 +15,7 @@ string make_daytime_string()
 string getindex() {
 	string result;
 	string line;
-	ifstream ind("index.html");
+	ifstream ind("www/index.html");
 	if(ind.is_open()) {
 		while(ind.good()) {
 			getline(ind,line);
@@ -35,7 +35,7 @@ int main()
     std::for_each(
         in(std::cin), in(), std::cout << (_1 * 3) << " " );*/
     boost::asio::io_service is;
-    tcp::acceptor acceptor(is, tcp::endpoint(tcp::v4(), 80)); //because port 80, must run as sudo
+    tcp::acceptor acceptor(is, tcp::endpoint(tcp::v4(), 8080)); //because port 80, must run as sudo
     
     while(true) {
 		tcp::socket sock(is);
