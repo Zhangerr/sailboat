@@ -3,6 +3,8 @@
 #include <string>
 #include <ctime>
 #include <fstream>
+#include "request_handler.hpp"
+
 using namespace std;
 using boost::asio::ip::tcp;
 
@@ -41,14 +43,32 @@ int main()
 		tcp::socket sock(is);
 		acceptor.accept(sock);
 		boost::system::error_code err;
-		//cout << make_daytime_string() << endl;
+		//works but cant convert to string easily
+		//boost::array<char, 512> buffer;
+		//size_t l = boost::asio::read(sock, boost::asio::buffer(buffer, 512), boost::asio::transfer_all(), err);
+		char buffer [512];
+	    size_t l = sock.read_some(boost::asio::buffer(buffer), err);
+		string str = buffer;
+		cout << str << endl;
+		//Host: x is the host, used for virtual named hosts and such
+		//GET / is page to load, regex isnt working so just subbing here with hardcode for now
+		//alex perhaps come up with a better regex here, atm have to substr to cut "Host: "
+		static const boost::regex hostRegex("Host: .*");
+		bool host = regex_match(str, hostRegex);
+		static const boost::regex uriRegex("(?=/).*(?= HTTP)");
+		bool uri = regex_match(str, uriRegex);
+		cout << host << endl;
+		cout << uri << endl;
+		//Request req (host, uri);
+		Request req("a", "b");
+		Response res = getResponse(req);
 		boost::asio::write(sock, boost::asio::buffer("\
 HTTP/1.1 200 OK\r\n\
 Date: " + make_daytime_string() + " GMT\r\n\
 Server: sailboat\r\n\
 Connection: close\r\n\
 Content-Type: text/html\r\n\r\n" 
-+ getindex()), boost::asio::transfer_all(), err);
++ res.getContent()), boost::asio::transfer_all(), err);
 		
 	}
 }
