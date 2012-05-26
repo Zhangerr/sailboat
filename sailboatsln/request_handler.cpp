@@ -2,5 +2,5 @@
 
 Response getResponse(Request req)
 {
-	return Response("hello");
+	return Response(req.getUri());
 }

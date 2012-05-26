@@ -1,5 +1,5 @@
 #include <string>
-#include <fstream>
+
 using namespace std;
 
 class Response {
@@ -28,28 +28,24 @@ class Response {
 	public:
 		string getContent();
 		Response(string);
+		string getHeaders();
 };
-string getFile(string fn) {
-	string result;
-	string line;
-	ifstream ind(fn.c_str());
-	if(ind.is_open()) {
-		while(ind.good()) {
-			getline(ind,line);
-			result += line + "\r\n";
-		}
-		return result;
-	} else {
-		return "could not find " + fn;
-	}
-}
+
 Response::Response (string page)
 {
-	content = getFile(page);
+	content = Util::getFile(Util::docroot + page);
+}
+//stub, actually construct the header
+string Response::getHeaders() {
+return "\
+HTTP/1.1 200 OK\r\n\
+Date: " + Util::make_daytime_string() + " GMT\r\n\
+Server: sailboat\r\n\
+Connection: close\r\n\
+Content-Type: text/html\r\n\r\n"; 
 }
 
-
-std::string Response::getContent()
+string Response::getContent()
 {
 	return content;
 }
