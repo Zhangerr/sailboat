@@ -6,7 +6,7 @@
 #include "request_handler.cpp"
 #include <boost/regex.hpp>
 #include <stdio.h>
-
+#include <boost/algorithm/string.hpp>
 using namespace std;
 using boost::asio::ip::tcp;
 
@@ -41,14 +41,24 @@ int main()
 		//Host: x is the host, used for virtual named hosts and such
 		//GET / is page to load, regex isnt working so just subbing here with hardcode for now
 		//alex perhaps come up with a better regex here, atm have to substr to cut "Host: "
-		boost::cmatch hostMatches;
-		boost::regex hostRegex(".");
-		bool host = boost::regex_search(str.c_str(), hostMatches, hostRegex);
-		cout << host << endl;
-		if (host)
-		{
-			
-		}
+	//	boost::cmatch hostMatches;
+		boost::regex hostRegex("Host: (.*)");
+		boost::match_flag_type flags = boost::match_default | boost::match_not_dot_newline; 
+	//	bool host = boost::regex_search(str.c_str(), hostMatches, hostRegex);
+		boost::sregex_token_iterator it(str.begin(), str.end(), hostRegex, 1, flags);
+   		boost::sregex_token_iterator end;
+  		for (; it != end; ++it) {
+	  		string res = it->str();
+	  		boost::algorithm::trim(res); //get rid of carriage return?
+       		cout << res << endl;
+        // v.push_back(it->str()); or something similar     
+   		 }
+	//	cout << host << endl;
+		//if (host)
+		//{
+		//	string match(hostMatches[1], hostMatches[1].second);
+		//	cout << "match: " << hostMatches[1].first << endl;
+	//	}
 		//static const boost::regex uriRegex("(?=/).*(?= HTTP)");
 		//bool uri = boost::regex_match(str, Matches, uriRegex);
 		//out << uri << endl;

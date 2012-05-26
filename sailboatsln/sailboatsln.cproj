@@ -39,10 +39,12 @@
   <ItemGroup>
     <Compile Include="request_handler.cpp" />
     <Compile Include="test.cpp" />
+    <Compile Include="request_headers.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="request.hpp" />
     <None Include="request_handler.hpp" />
     <None Include="response.hpp" />
+    <None Include="teststsdf.h" />
   </ItemGroup>
 </Project>
