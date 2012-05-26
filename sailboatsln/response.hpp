@@ -1,4 +1,5 @@
 #include <string>
+#include <fstream>
 using namespace std;
 
 class Response {
@@ -28,11 +29,25 @@ class Response {
 		string getContent();
 		Response(string);
 };
-
+string getFile(string fn) {
+	string result;
+	string line;
+	ifstream ind(fn.c_str());
+	if(ind.is_open()) {
+		while(ind.good()) {
+			getline(ind,line);
+			result += line + "\r\n";
+		}
+		return result;
+	} else {
+		return "could not find " + fn;
+	}
+}
 Response::Response (string page)
 {
-	content = "hello world";
+	content = getFile(page);
 }
+
 
 std::string Response::getContent()
 {

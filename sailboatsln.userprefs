@@ -1,0 +1,16 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="sailboatsln/test.cpp">
+    <Files>
+      <File FileName="sailboatsln/response.hpp" Line="35" Column="17" />
+      <File FileName="sailboatsln/request_handler.cpp" Line="3" Column="10" />
+      <File FileName="sailboatsln/request.hpp" Line="1" Column="1" />
+      <File FileName="sailboatsln/request_handler.hpp" Line="5" Column="34" />
+      <File FileName="sailboatsln/test.cpp" Line="6" Column="28" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

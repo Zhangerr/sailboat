@@ -3,9 +3,9 @@
 #include <string>
 #include <ctime>
 #include <fstream>
-#include "request_handler.hpp"
+#include "request_handler.cpp"
 #include <boost/regex.hpp>
-
+#include <stdio.h>
 
 using namespace std;
 using boost::asio::ip::tcp;
@@ -16,28 +16,11 @@ string make_daytime_string()
   return ctime(&now);
 }
 
-string getindex() {
-	string result;
-	string line;
-	ifstream ind("www/index.html");
-	if(ind.is_open()) {
-		while(ind.good()) {
-			getline(ind,line);
-			result += line + "\r\n";
-		}
-		return result;
-	} else {
-		return "could not find index";
-	}
-}
-//need to include content-length
+//use XML to set document root
+
+//need to include content-length but it seems it is not sent by all servers
 int main()
 {
-   /* using namespace boost::lambda;
-    typedef std::istream_iterator<int> in;
-	cout << "enter numbers" << endl;
-    std::for_each(
-        in(std::cin), in(), std::cout << (_1 * 3) << " " );*/
     boost::asio::io_service is;
     tcp::acceptor acceptor(is, tcp::endpoint(tcp::v4(), 8080)); //because port 80, must run as sudo
     
@@ -48,16 +31,19 @@ int main()
 		//works but cant convert to string easily
 		//boost::array<char, 512> buffer;
 		//size_t l = boost::asio::read(sock, boost::asio::buffer(buffer, 512), boost::asio::transfer_all(), err);
-		char buffer [512];
+		char buffer [512]; //is this liable to a buffer overflow exploit
 	    size_t l = sock.read_some(boost::asio::buffer(buffer), err);
 		string str = buffer;
-		cout << str << endl;
+		char hostt[512];
+		sscanf(str.c_str(), "%*s %s", hostt);
+		cout << hostt << endl;
+		//cout << str << endl;
 		//Host: x is the host, used for virtual named hosts and such
 		//GET / is page to load, regex isnt working so just subbing here with hardcode for now
 		//alex perhaps come up with a better regex here, atm have to substr to cut "Host: "
 		boost::cmatch hostMatches;
 		boost::regex hostRegex(".");
-		bool host = boost::regex_match(str.c_str(), hostMatches, hostRegex);
+		bool host = boost::regex_search(str.c_str(), hostMatches, hostRegex);
 		cout << host << endl;
 		if (host)
 		{
