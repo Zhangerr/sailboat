@@ -1,5 +1,7 @@
 #include <string>
 #include <sstream>
+#include <boost/regex.hpp>
+#include <boost/algorithm/string.hpp>
 using namespace std;
 
 class Request {
@@ -12,6 +14,7 @@ class Request {
 		Request(string);
 		string getHost();
 		string getUri();
+		string getVerb();
 };
 
 Request::Request (string h, string u) {
@@ -35,8 +38,13 @@ Request::Request(string headers) {
 		if(string(req) == "/") {
 			uri = "/index.html";
 		} else {
-		uri = req;
-		}
+			//read extension types from file?
+			boost::regex uriRegex("([^\\s]+(\\.(?i)(html|htm))$)");	
+			bool match = false;
+			match = boost::regex_match(uri.c_str(), uriRegex);
+			cout << match << endl;
+			uri = req;
+		}		
 		cout << uri << endl;
 	} else {
 		cout << "encountered huge request" << endl;
