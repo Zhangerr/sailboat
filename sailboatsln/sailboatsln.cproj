@@ -22,8 +22,8 @@
     <OutputName>sailboatsln</OutputName>
     <CustomCommands>
       <CustomCommands>
-        <Command type="Build" command="g++ -o test test.cpp -lboost_filesystem -lboost_regex" />
-        <Command type="Execute" command="./test" workingdir="${ProjectDir}/bin/Debug" />
+        <Command type="Build" command="g++ -o sailboat main.cpp -lboost_filesystem -lboost_regex" />
+        <Command type="Execute" command="./sailboat" workingdir="${ProjectDir}/bin/Debug" />
       </CustomCommands>
     </CustomCommands>
   </PropertyGroup>
@@ -38,8 +38,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="request_handler.cpp" />
-    <Compile Include="test.cpp" />
     <Compile Include="Util.cpp" />
+    <Compile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="request.hpp" />

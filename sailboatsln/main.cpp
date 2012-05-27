@@ -1,10 +1,43 @@
 #include <iostream>
+#include <stdio.h>
+#include "boost/asio.hpp"
+#include <string>
+#include <boost/regex.hpp>
+#include <boost/algorithm/string.hpp>
+#include "xml/rapidxml.hpp"
+#include <fstream>
+#include <ctime>
+#include <sstream>
+#include "Util.cpp"
+#include "request.hpp"
+#include "response.hpp"
+
 using namespace std;
+using boost::asio::ip::tcp;
 
-int main (int argc, char *argv[])
+//need to include content-length but it seems it is not sent by all servers
+int main()
 {
-	cout << "Hello world!" << endl;
-	
-	return 0;
+    boost::asio::io_service is;
+    tcp::acceptor acceptor(is, tcp::endpoint(tcp::v4(), 8080)); //if port 80, must run as sudo
+    if(!Util::parseXml()) { //fixes segmentation fault
+    	cout << "Please make sure config.xml is located in the working directory and that it is readable." << endl;
+    	return -1;
+    }
+    while(true) {
+		tcp::socket sock(is);
+		acceptor.accept(sock);
+		boost::system::error_code err;
+		//works but cant convert to string easily
+		//boost::array<char, 512> buffer;
+		//size_t l = boost::asio::read(sock, boost::asio::buffer(buffer, 512), boost::asio::transfer_all(), err);
+		char buffer [1024]; //is this liable to a buffer overflow exploit
+	    size_t l = sock.read_some(boost::asio::buffer(buffer), err);
+		string str = buffer;
+		Request request(str);
+		//static const boost::regex uriRegex("(?=/).*(?= HTTP)");	
+		//Request req (host, uri);
+		Response res = getResponse(request);
+		boost::asio::write(sock, boost::asio::buffer(res.getHeaders() + res.getContent()), boost::asio::transfer_all(), err);		
+	}
 }
-

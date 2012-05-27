@@ -1,6 +1,3 @@
-#include <string>
-#include "Util.cpp"
-
 using namespace std;
 
 class Response {
@@ -32,9 +29,20 @@ class Response {
 		string getHeaders();
 };
 
+Response getResponse(Request req)
+{
+	return Response(req.getUri());
+}
+string extensions[] = {".html", ".htm"};
+
 Response::Response (string page)
 {
-	content = Util::getFile(Util::docroot + page);
+	string reqpage = Util::docroot + page;
+	if(Util::exists(reqpage)) {
+		content = Util::getFile(reqpage);
+	} else {
+		
+	}
 }
 //stub, actually construct the header
 string Response::getHeaders() {

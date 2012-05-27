@@ -1,8 +1,3 @@
-#include <boost/regex.hpp>
-#include <boost/algorithm/string.hpp>
-#include "xml/rapidxml.hpp"
-#include <fstream>
-#include <ctime>
 namespace Util {
 	using namespace std;
 	using namespace rapidxml;
@@ -35,7 +30,14 @@ namespace Util {
 	       		return res;
 	   		}
 	}
-
+	
+	bool exists(string name) {
+		ifstream myfile(name.c_str());
+		if (myfile.good()) {
+			return true;
+		}
+		return false;
+	}
 	string getFile(string fn) {
 		string result;
 		string line;
@@ -47,19 +49,23 @@ namespace Util {
 			}
 			return result;
 		} else {
-			return "could not find " + fn;
+			return "";
 		}
 	}
 	//http://www.ffuts.org/blog/quick-notes-on-how-to-use-rapidxml/
-	void parseXml() {
-	string xml = getFile("config.xml");
-	xml_document<> doc;
-	doc.parse<parse_declaration_node | parse_no_data_nodes>(&xml[0]);
-	xml_node<>* cur_node = doc.first_node("settings");
-    string dr = cur_node->first_node("DocumentRoot")->value();
-    cout << "DocumentRoot:" << dr << endl;
-    docroot = dr;
-    //could use attribute instead, whitespace could be an issue using values
+	bool parseXml() {
+		if (!exists("config.xml")) {
+			return false;
+		}
+		string xml = getFile("config.xml");
+		xml_document<> doc;
+		doc.parse<parse_declaration_node | parse_no_data_nodes>(&xml[0]);
+		xml_node<>* cur_node = doc.first_node("settings");
+	    string dr = cur_node->first_node("DocumentRoot")->value();
+	    cout << "DocumentRoot:" << dr << endl;
+	    docroot = dr;
+	    //could use attribute instead, whitespace could be an issue using values
+	    return true;
 	}
 	
 }
