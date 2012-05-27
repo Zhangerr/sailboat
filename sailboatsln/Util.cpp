@@ -2,6 +2,7 @@ namespace Util {
 	using namespace std;
 	using namespace rapidxml;
 	string docroot;
+	string fileExtensions;
 	string make_daytime_string()
 	{
 	  time_t now = time(0);
@@ -64,6 +65,9 @@ namespace Util {
 	    string dr = cur_node->first_node("DocumentRoot")->value();
 	    cout << "DocumentRoot:" << dr << endl;
 	    docroot = dr;
+		string fileExt = cur_node->first_node("FileExtensions")->value();
+		cout << "FileExtensions:" << fileExt << endl;
+		fileExtensions = fileExt;		
 	    //could use attribute instead, whitespace could be an issue using values
 	    return true;
 	}

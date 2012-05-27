@@ -1,7 +1,10 @@
 using namespace std;
 
 class Response {
-	private:
+	private:	
+		string content;
+		string headers;
+	public:
 	//copied from http://www.boost.org/doc/libs/1_35_0/doc/html/boost_asio/example/http/server/reply.hpp
 		enum status_type
 		  {
@@ -22,39 +25,9 @@ class Response {
 			bad_gateway = 502,
 			service_unavailable = 503
 		  } status;
-		string content;
-	public:
 		string getContent();
-		Response(string);
+		Response(string, status_type);
+		string generateHeaders(status_type);
 		string getHeaders();
+		string getPage();
 };
-
-Response getResponse(Request req)
-{
-	return Response(req.getUri());
-}
-string extensions[] = {".html", ".htm"};
-
-Response::Response (string page)
-{
-	string reqpage = Util::docroot + page;
-	if(Util::exists(reqpage)) {
-		content = Util::getFile(reqpage);
-	} else {
-		
-	}
-}
-//stub, actually construct the header
-string Response::getHeaders() {
-return "\
-HTTP/1.1 200 OK\r\n\
-Date: " + Util::make_daytime_string() + " GMT\r\n\
-Server: sailboat\r\n\
-Connection: close\r\n\
-Content-Type: text/html\r\n\r\n"; 
-}
-
-string Response::getContent()
-{
-	return content;
-}

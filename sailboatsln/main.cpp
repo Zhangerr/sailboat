@@ -9,8 +9,7 @@
 #include <ctime>
 #include <sstream>
 #include "Util.cpp"
-#include "request.hpp"
-#include "response.hpp"
+#include "response.cpp"
 
 using namespace std;
 using boost::asio::ip::tcp;
@@ -38,6 +37,6 @@ int main()
 		//static const boost::regex uriRegex("(?=/).*(?= HTTP)");	
 		//Request req (host, uri);
 		Response res = getResponse(request);
-		boost::asio::write(sock, boost::asio::buffer(res.getHeaders() + res.getContent()), boost::asio::transfer_all(), err);		
+		boost::asio::write(sock, boost::asio::buffer(res.getPage()), boost::asio::transfer_all(), err);		
 	}
 }
