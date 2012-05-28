@@ -17,15 +17,17 @@ using boost::asio::ip::tcp;
 //need to include content-length but it seems it is not sent by all servers
 int main()
 {
-    boost::asio::io_service is;
-    tcp::acceptor acceptor(is, tcp::endpoint(tcp::v4(), 8080)); //if port 80, must run as sudo
+   
     if(!Util::parseXml()) { //fixes segmentation fault
     	cout << "Please make sure config.xml is located in the working directory and that it is readable." << endl;
     	return -1;
     }
+    boost::asio::io_service is;
+    tcp::acceptor acceptor(is, tcp::endpoint(tcp::v4(), Util::port)); //if port 80, must run as sudo
     while(true) {
 		tcp::socket sock(is);
 		acceptor.accept(sock);
+		
 		boost::system::error_code err;
 		//works but cant convert to string easily
 		//boost::array<char, 512> buffer;
@@ -34,6 +36,7 @@ int main()
 	    size_t l = sock.read_some(boost::asio::buffer(buffer), err);
 		string str = buffer;
 		Request request(str);
+		cout << Util::make_daytime_string() << "\t" << sock.remote_endpoint().address().to_string() << "\t" << request.getVerb() << " " << request.getUri() << endl;
 		//static const boost::regex uriRegex("(?=/).*(?= HTTP)");	
 		//Request req (host, uri);
 		Response res = getResponse(request);

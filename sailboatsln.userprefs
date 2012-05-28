@@ -1,17 +1,20 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" ctype="Workspace" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="sailboatsln/response.hpp" ctype="Workbench">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="sailboatsln/request.cpp">
     <Files>
-      <File FileName="sailboatsln/response.hpp" Line="44" Column="3" />
+      <File FileName="sailboatsln/response.hpp" Line="1" Column="19" />
       <File FileName="sailboatsln/request_handler.cpp" Line="3" Column="1" />
       <File FileName="sailboatsln/request_handler.hpp" Line="1" Column="1" />
-      <File FileName="sailboatsln/main.cpp" Line="16" Column="28" />
-      <File FileName="sailboatsln/Util.cpp" Line="58" Column="17" />
-      <File FileName="sailboatsln/request.hpp" Line="15" Column="1" />
+      <File FileName="sailboatsln/main.cpp" Line="6" Column="1" />
+      <File FileName="sailboatsln/Util.cpp" Line="70" Column="27" />
+      <File FileName="sailboatsln/request.hpp" Line="3" Column="15" />
+      <File FileName="sailboatsln/response.cpp" Line="13" Column="3" />
+      <File FileName="sailboatsln/request.cpp" Line="8" Column="1" />
+      <File FileName="sailboatsln/xml/rapidxml.hpp" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches ctype="PinnedWatchStore" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>

@@ -3,10 +3,15 @@ namespace Util {
 	using namespace rapidxml;
 	string docroot;
 	string fileExtensions;
+	int port = 8080;
 	string make_daytime_string()
 	{
 	  time_t now = time(0);
-	  return ctime(&now);
+	  string tm = ctime(&now);
+	  
+	  boost::algorithm::trim(tm);
+	  return tm;
+	  
 	}
 	string getHost(string headers) {
 			//Host: x is the host, used for virtual named hosts and such
@@ -67,7 +72,11 @@ namespace Util {
 	    docroot = dr;
 		string fileExt = cur_node->first_node("FileExtensions")->value();
 		cout << "FileExtensions:" << fileExt << endl;
-		fileExtensions = fileExt;		
+		fileExtensions = fileExt;	
+		string portnum = cur_node->first_node("Port")->value();
+		stringstream ss(portnum);
+		ss >> port;	
+		cout << "listening on port " << port << endl;
 	    //could use attribute instead, whitespace could be an issue using values
 	    return true;
 	}

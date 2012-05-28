@@ -37,13 +37,13 @@
     <CompileTarget>Bin</CompileTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="request_handler.cpp" />
     <Compile Include="Util.cpp" />
     <Compile Include="main.cpp" />
+    <Compile Include="request.cpp" />
+    <Compile Include="response.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="request.hpp" />
-    <None Include="request_handler.hpp" />
     <None Include="response.hpp" />
     <None Include="xml\rapidxml.hpp" />
     <None Include="xml\rapidxml_iterators.hpp" />
