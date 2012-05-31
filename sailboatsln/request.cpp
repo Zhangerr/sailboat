@@ -1,5 +1,11 @@
+#ifndef __REQUEST_HPP_INCLUDED
+#define __REQUEST_HPP_INCLUDED
 #include "request.hpp"
-
+#endif
+#include "response.hpp"
+#include <iostream>
+#include <sstream>
+#include <stdio.h>
 Request::Request (string h, string u) {
 	host = h;
 	uri = h + u;
@@ -11,7 +17,7 @@ string Request::getVerb() {
 	return verb;
 }
 Request::Request(string headers) {
-	status - Response::ok;
+	status = Response::ok;
 	host = Util::getHost(headers);
 	
 	stringstream ss(headers);

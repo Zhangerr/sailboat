@@ -1,5 +1,4 @@
 #include "response.hpp"
-#include "request.cpp"
 //namespace copied and edited from http://www.boost.org/doc/libs/1_35_0/doc/html/boost_asio/example/http/server/reply.cpp
 namespace status_strings {
 
@@ -81,7 +80,7 @@ string getStatus(Response::status_type status)
 }
 Response getResponse(Request req)
 {	
-	return Response(req.getUri(), req.status);
+	return Response(req.getUri(), (Response::status_type)req.status);
 }
 string extensions[] = {".html", ".htm"};
 

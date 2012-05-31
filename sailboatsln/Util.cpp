@@ -1,17 +1,29 @@
+#ifndef __UTIL_HPP_INCLUDED
+#define __UTIL_HPP_INCLUDED
+#include "Util.hpp"
+#endif
+#include <boost/algorithm/string.hpp>
+#include <boost/regex.hpp>
+#include "xml/rapidxml.hpp"
+#include <iostream>
+#include <sstream>
+#include <stdio.h>
+#include <fstream>
+#include <ctime>
+
 namespace Util {
 	using namespace std;
 	using namespace rapidxml;
-	string docroot;
-	string fileExtensions;
-	int port = 8080;
+	std::string docroot;
+	std::string fileExtensions;
+	int port;
 	string make_daytime_string()
 	{
 	  time_t now = time(0);
 	  string tm = ctime(&now);
 	  
 	  boost::algorithm::trim(tm);
-	  return tm;
-	  
+	  return tm;	  
 	}
 	string getHost(string headers) {
 			//Host: x is the host, used for virtual named hosts and such
@@ -79,6 +91,5 @@ namespace Util {
 		cout << "listening on port " << port << endl;
 	    //could use attribute instead, whitespace could be an issue using values
 	    return true;
-	}
-	
+	}	
 }

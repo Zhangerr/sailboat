@@ -8,9 +8,15 @@
 #include <fstream>
 #include <ctime>
 #include <sstream>
-#include "Util.cpp"
-#include "response.cpp"
-
+#ifndef __REQUEST_HPP_INCLUDED
+#define __REQUEST_HPP_INCLUDED
+#include "request.hpp"
+#endif
+#include "response.hpp"
+#ifndef __UTIL_HPP_INCLUDED
+#define __UTIL_HPP_INCLUDED
+#include "Util.hpp"
+#endif
 using namespace std;
 using boost::asio::ip::tcp;
 
