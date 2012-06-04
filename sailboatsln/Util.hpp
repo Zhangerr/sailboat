@@ -1,3 +1,5 @@
+#ifndef __UTIL_HPP_INCLUDED
+#define __UTIL_HPP_INCLUDED
 #include <string>
 namespace Util {
 	extern std::string docroot;
@@ -9,3 +11,4 @@ namespace Util {
 	std::string getFile(std::string);
 	bool parseXml();
 }
+#endif

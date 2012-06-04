@@ -1,7 +1,4 @@
-#ifndef __REQUEST_HPP_INCLUDED
-#define __REQUEST_HPP_INCLUDED
 #include "request.hpp"
-#endif
 #include "response.hpp"
 #include <iostream>
 #include <sstream>

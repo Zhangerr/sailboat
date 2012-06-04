@@ -1,12 +1,6 @@
 #include <string>
-#ifndef __REQUEST_HPP_INCLUDED
-#define __REQUEST_HPP_INCLUDED
 #include "request.hpp"
-#endif
-#ifndef __UTIL_HPP_INCLUDED
-#define __UTIL_HPP_INCLUDED
 #include "Util.hpp"
-#endif
 using namespace std;
 
 class Response {

@@ -1,9 +1,8 @@
+#ifndef __REQUEST_HPP_INCLUDED
+#define __REQUEST_HPP_INCLUDED
 #include <string>
 #include <boost/regex.hpp>
-#ifndef __UTIL_HPP_INCLUDED
-#define __UTIL_HPP_INCLUDED
 #include "Util.hpp"
-#endif
 using namespace std;
 class Request {
 	private:
@@ -18,3 +17,4 @@ class Request {
 		string getUri();
 		string getVerb();
 };
+#endif

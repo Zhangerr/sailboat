@@ -1,7 +1,4 @@
-#ifndef __UTIL_HPP_INCLUDED
-#define __UTIL_HPP_INCLUDED
 #include "Util.hpp"
-#endif
 #include <boost/algorithm/string.hpp>
 #include <boost/regex.hpp>
 #include "xml/rapidxml.hpp"
