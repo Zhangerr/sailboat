@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <settings version="1.0">
-	<DocumentRoot>/home/alex/sailboat/sailboatsln/bin/Debug/www</DocumentRoot>
+	<DocumentRoot>www</DocumentRoot>
 	<FileExtensions>html|htm</FileExtensions>
 	<Port>7878</Port>
 </settings>
