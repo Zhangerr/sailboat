@@ -36,7 +36,7 @@ int main()
 	    size_t l = sock.read_some(boost::asio::buffer(buffer), err);
 		string str = buffer;
 		Request request(str);
-		cout << Util::make_daytime_string() << "\t" << sock.remote_endpoint().address().to_string() << "\t" << request.getVerb() << " " << request.getUri() << endl;
+		Util::log(Util::make_daytime_string() + "\t" + sock.remote_endpoint().address().to_string() + "\t" + request.getVerb() + " " + request.getUri());
 		//static const boost::regex uriRegex("(?=/).*(?= HTTP)");	
 		//Request req (host, uri);
 		Response res = getResponse(request);

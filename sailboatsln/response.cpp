@@ -1,4 +1,5 @@
 #include "response.hpp"
+#include <iostream>
 //namespace copied and edited from http://www.boost.org/doc/libs/1_35_0/doc/html/boost_asio/example/http/server/reply.cpp
 namespace status_strings {
 
@@ -80,28 +81,36 @@ string getStatus(Response::status_type status)
 }
 Response getResponse(Request req)
 {	
-	return Response(req.getUri(), (Response::status_type)req.status);
+	return Response(req.getUri(), (Response::status_type)req.status,req.getHost());
 }
-string extensions[] = {".html", ".htm"};
 
-Response::Response (string page, status_type status)
+Response::Response (string page, status_type status, string host)
 {
-	string reqpage = Util::docroot + page;
+	string root = Util::docroot;
+	if(Util::hosts.find(host) != Util::hosts.end()) {
+		Util::log("vhost " + Util::hosts[host].getHost() + " found for " + host,2);
+		root = Util::hosts[host].getRoot();
+	} else {
+		Util::log("vhost not found for " + host,2);
+	}
+	string reqpage = root + page;
 	if(Util::exists(reqpage)) {
 		content = Util::getFile(reqpage);
 	} else {
+		Util::log("Resource " + reqpage + " not found",2);
 		content = "404 Page Not Found :(";
 	}
 	headers = generateHeaders(status);
 }
+
 //stub, actually construct the header
 string Response::generateHeaders(status_type status) {
 	//cout << status_strings::getStatus(status) << endl;
-return status_strings::getStatus(status) + "Date: "
-+ Util::make_daytime_string() + " GMT\r\n\
-Server: sailboat\r\n\
-Connection: close\r\n\
-Content-Type: text/html\r\n\r\n"; 
+	return status_strings::getStatus(status) + "Date: "
+	+ Util::make_daytime_string() + " GMT\r\n\
+	Server: sailboat\r\n\
+	Connection: close\r\n\
+	Content-Type: text/html\r\n\r\n"; 
 }
 string Response::getHeaders()
 {

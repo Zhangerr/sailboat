@@ -13,6 +13,9 @@ string Request::getUri() {
 string Request::getVerb() {
 	return verb;
 }
+string Request::getHost() {
+	return host;
+}
 Request::Request(string headers) {
 	status = Response::ok;
 	host = Util::getHost(headers);

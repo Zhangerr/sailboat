@@ -29,7 +29,7 @@ class Response {
 			service_unavailable = 503
 		  } status;
 		string getContent();
-		Response(string, status_type);
+		Response(string, status_type,string);
 		string generateHeaders(status_type);
 		string getHeaders();
 		string getPage();

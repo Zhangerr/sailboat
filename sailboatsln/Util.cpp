@@ -11,9 +11,19 @@
 namespace Util {
 	using namespace std;
 	using namespace rapidxml;
-	std::string docroot;
-	std::string fileExtensions;
+	string docroot;
+	string fileExtensions;
+	map<string,Host> hosts;
 	int port;
+	int loglevel = 1;
+	void log(string a) {
+		log(a,0);
+	}
+	void log(string a, int lvl) {
+		if(loglevel>=lvl){
+			cout << a << endl;
+		}
+	}
 	string make_daytime_string()
 	{
 	  time_t now = time(0);
@@ -77,15 +87,39 @@ namespace Util {
 		doc.parse<parse_declaration_node | parse_no_data_nodes>(&xml[0]);
 		xml_node<>* cur_node = doc.first_node("settings");
 	    string dr = cur_node->first_node("DocumentRoot")->value();
-	    cout << "DocumentRoot:" << dr << endl;
+	    Util::log("DocumentRoot:" + dr);
 	    docroot = dr;
 		string fileExt = cur_node->first_node("FileExtensions")->value();
-		cout << "FileExtensions:" << fileExt << endl;
+		Util::log("FileExtensions:" + fileExt);
 		fileExtensions = fileExt;	
 		string portnum = cur_node->first_node("Port")->value();
 		stringstream ss(portnum);
 		ss >> port;	
-		cout << "listening on port " << port << endl;
+		Util::log("listening on port " + portnum);
+		ss.str("");
+		ss.clear();
+		string ll = cur_node->first_node("LogLevel")->value();
+		ss << ll;
+		ss >> loglevel;
+		Util::log("Log level is set to " + ll);
+		for(xml_node<>* i = cur_node->first_node("VirtualHost"); i; i = i->next_sibling("VirtualHost")) {
+			Util::log("vhost found:");
+			string name = i->first_node("Name")->value();
+			if(port != 80) {
+				name = name + ":" + portnum;
+			}
+			string docroot = i->first_node("DocumentRoot")->value();
+			Util::log("Name: " + name);
+			Util::log("Root: " + docroot);
+			//hosts.insert(map<string,Host>::value_type(name,Host(name,docroot)));
+			hosts[name]=Host(name,docroot);
+			//cout << hosts[name].getHost() << endl;
+			//=\
+			//for(string::reverse_iterator j = name.rbegin(); j < name.rend();j++) {
+				//cout << *j;
+			//}
+		//	hosts[name] = Host(name,docroot);
+		}
 	    //could use attribute instead, whitespace could be an issue using values
 	    return true;
 	}	

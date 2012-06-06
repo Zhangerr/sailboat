@@ -3,4 +3,9 @@
 	<DocumentRoot>www</DocumentRoot>
 	<FileExtensions>html|htm</FileExtensions>
 	<Port>7878</Port>
+	<LogLevel>2</LogLevel>
+	<VirtualHost>
+		<Name>alex-ubu</Name>
+		<DocumentRoot>www/a</DocumentRoot>			
+	</VirtualHost>
 </settings>
