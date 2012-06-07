@@ -126,7 +126,15 @@ namespace Util {
 			string docroot = i->first_node("DocumentRoot")->value();
 			Util::log("Name: " + name);
 			Util::log("Root: " + docroot);
-			hosts[name]=Host(name,docroot);
+			string notFound;
+			if (i->first_node("404Page") != NULL)
+			{
+				notFound = i->first_node("404Page")->value();
+				Util::log("404 page: " + notFound);
+				hosts[name]=Host(name,docroot, notFound);
+			}
+			else
+				hosts[name]=Host(name,docroot);
 		}
 		return true;
 	}

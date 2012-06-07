@@ -97,7 +97,14 @@ Response::Response (string page, status_type status, string host)
 		content = Util::getFile(reqpage);
 	} else {
 		Util::log("Resource " + reqpage + " not found",2);
-		content = "404 Page Not Found :(";
+		if (Util::hosts[host].has404())
+		{
+			reqpage = root + "/" + Util::hosts[host].getNotFound();
+			Util::log("Custom 404 available for " + host + ": " + reqpage, 2);
+			content = Util::getFile(reqpage);
+		}
+		else
+			content = "404 Page Not Found";
 	}
 	headers = generateHeaders(status);
 }

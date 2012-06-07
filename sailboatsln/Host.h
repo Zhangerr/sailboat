@@ -6,10 +6,15 @@ class Host {
 	private:
 		string host;
 		string root;
+		string notFoundPage;
+		bool _has404;
 	public:
 		string getHost();
 		string getRoot();		
-		Host(string a, string b) : host(a),root(b){}	
+		string getNotFound();
+		bool has404();
+		Host(string a, string b) : host(a), root(b) {_has404 = false;}
+		Host(string a, string b, string c) : host(a),root(b),notFoundPage(c){_has404 = true;}	
 		Host(); //needed for map apparently
 };
 #endif
