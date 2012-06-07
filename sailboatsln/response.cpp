@@ -78,8 +78,11 @@ string getStatus(Response::status_type status)
   }
 }
 }
+bool returnContent = true;
 Response getResponse(Request req)
-{	
+{		
+	if (req.getVerb() == "HEAD")
+		returnContent = false;
 	return Response(req.getUri(), (Response::status_type)req.status,req.getHost());
 }
 
@@ -101,7 +104,15 @@ Response::Response (string page, status_type status, string host)
 		{
 			reqpage = root + "/" + Util::hosts[host].getNotFound();
 			Util::log("Custom 404 available for " + host + ": " + reqpage, 2);
-			content = Util::getFile(reqpage);
+			if (Util::exists(reqpage))
+			{
+				content = Util::getFile(reqpage);
+			}
+			else
+			{
+				content = "404 Page Not Found. \r\nAdditionally a 404 Not Found error occured while getting the 404 Not Found Page.";
+				Util::log("The custom 404 for " + host + " was not found.");
+			}
 		}
 		else
 			content = "404 Page Not Found";
@@ -112,11 +123,14 @@ Response::Response (string page, status_type status, string host)
 //stub, actually construct the header
 string Response::generateHeaders(status_type status) {
 	//cout << status_strings::getStatus(status) << endl;
-	return status_strings::getStatus(status) + "Date: "
+	string res = status_strings::getStatus(status) + "Date: "
 	+ Util::make_daytime_string() + " GMT\r\n\
 	Server: sailboat\r\n\
 	Connection: close\r\n\
-	Content-Type: text/html\r\n\r\n"; 
+	";
+	if (returnContent)
+		res = res + "Content-Type: text/html\r\n\r\n"; 
+	return res;
 }
 string Response::getHeaders()
 {
@@ -128,5 +142,5 @@ string Response::getContent()
 }
 string Response::getPage()
 {
-	return headers + content;
+	return headers + (returnContent?content:"");
 }
