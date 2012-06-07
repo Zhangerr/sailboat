@@ -127,9 +127,9 @@ namespace Util {
 			Util::log("Name: " + name);
 			Util::log("Root: " + docroot);
 			string notFound;
-			if (i->first_node("404Page") != NULL)
+			if (i->first_node("NotFound") != NULL)
 			{
-				notFound = i->first_node("404Page")->value();
+				notFound = i->first_node("NotFound")->value();
 				Util::log("404 page: " + notFound);
 				hosts[name]=Host(name,docroot, notFound);
 			}
