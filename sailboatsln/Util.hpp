@@ -12,6 +12,7 @@ namespace Util {
 	bool exists(std::string);
 	std::string getFile(std::string);
 	bool parseXml();
+	bool parseVH();
 	extern map<string,Host> hosts;
 	void log(std::string);
 	void log(std::string, int);
