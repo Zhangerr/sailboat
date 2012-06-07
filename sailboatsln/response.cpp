@@ -1,5 +1,4 @@
 #include "response.hpp"
-#include <iostream>
 //namespace copied and edited from http://www.boost.org/doc/libs/1_35_0/doc/html/boost_asio/example/http/server/reply.cpp
 namespace status_strings {
 
