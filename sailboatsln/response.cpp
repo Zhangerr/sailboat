@@ -89,33 +89,43 @@ Response getResponse(Request req)
 Response::Response (string page, status_type status, string host)
 {
 	string root = Util::docroot;
+	bool moved = false;
 	if(Util::hosts.find(host) != Util::hosts.end()) {
 		Util::log("vhost " + Util::hosts[host].getHost() + " found for " + host,2);
 		root = Util::hosts[host].getRoot();
+		moved = Util::hosts[host].moved[page];
 	} else {
 		Util::log("vhost not found for " + host,2);
 	}
 	string reqpage = root + page;
-	if(Util::exists(reqpage)) {
-		content = Util::getFile(reqpage);
-	} else {
-		Util::log("Resource " + reqpage + " not found",2);
-		if (Util::hosts[host].has404())
-		{
-			reqpage = root + "/" + Util::hosts[host].getNotFound();
-			Util::log("Custom 404 available for " + host + ": " + reqpage, 2);
-			if (Util::exists(reqpage))
+	if (!moved)
+	{
+		if(Util::exists(reqpage)) {
+			content = Util::getFile(reqpage);
+		} else {
+			Util::log("Resource " + reqpage + " not found",2);
+			if (Util::hosts[host].has404())
 			{
-				content = Util::getFile(reqpage);
+				reqpage = root + "/" + Util::hosts[host].getNotFound();
+				Util::log("Custom 404 available for " + host + ": " + reqpage, 2);
+				if (Util::exists(reqpage))
+				{
+					content = Util::getFile(reqpage);
+				}
+				else
+				{
+					content = "404 Page Not Found. \r\nAdditionally a 404 Not Found error occured while getting the 404 Not Found Page.";
+					Util::log("The custom 404 for " + host + " was not found.");
+				}
 			}
 			else
-			{
-				content = "404 Page Not Found. \r\nAdditionally a 404 Not Found error occured while getting the 404 Not Found Page.";
-				Util::log("The custom 404 for " + host + " was not found.");
-			}
+				content = "404 Page Not Found";
 		}
-		else
-			content = "404 Page Not Found";
+	}
+	else
+	{
+		status = Response::moved_permanently;
+		content = "410 Moved Permanently";
 	}
 	headers = generateHeaders(status);
 }

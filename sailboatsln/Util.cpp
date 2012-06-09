@@ -108,7 +108,7 @@ namespace Util {
 	bool parseVH()
 	{
 		if (!exists("hosts.xml")) {
-			cout << "No hosts.xml found" << endl;
+			Util::log("No hosts.xml found");
 			return false;
 		}
 		string xml = getFile("hosts.xml");
@@ -135,6 +135,11 @@ namespace Util {
 			}
 			else
 				hosts[name]=Host(name,docroot);
+			for (xml_node<>* a = i->first_node("ResourceMoved"); a; a = a->next_sibling("ResourceMoved")) {
+				string res = a->value();
+				Util::log("request for resource " + res + " will return a 410 status");
+				hosts[name].moved[res] = true;
+			}
 		}
 		return true;
 	}
