@@ -30,7 +30,7 @@ class Response {
 		  } status;
 		string getContent();
 		Response(string, status_type,string);
-		string generateHeaders(status_type);
+		string generateHeaders(status_type,string);
 		string getHeaders();
 		string getPage();
 };

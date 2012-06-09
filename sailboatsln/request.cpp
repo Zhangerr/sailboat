@@ -69,12 +69,7 @@ Request::Request(string headers) {
 		}
 		else
 		{
-			//uri = req;
-			//if(Util::exists(Util::docroot + string(req))) { 				
-			//	status = Response::ok;
-			//} else {
 				status = Response::not_found;
-			//}
 		}	
 		}		
 	//	cout << verb << " " << uri << endl;

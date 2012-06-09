@@ -17,5 +17,8 @@ namespace Util {
 	void log(std::string);
 	void log(std::string, int);
 	extern int loglevel;
+	std::string getMime(std::string);
+	bool loadMime();
+	extern map<string,string> mimemap;
 }
 #endif

@@ -1,5 +1,6 @@
 #include "Util.hpp"
 #include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string/predicate.hpp>
 #include <boost/regex.hpp>
 #include "xml/rapidxml.hpp"
 #include <iostream>
@@ -7,6 +8,7 @@
 #include <stdio.h>
 #include <fstream>
 #include <ctime>
+#include <vector>
 
 namespace Util {
 	using namespace std;
@@ -54,11 +56,13 @@ namespace Util {
 		  	boost::algorithm::trim(res); //get rid of carriage return
 	       	return res;
 	   	}
+	   	return "";
 	}
 	
 	bool exists(string name) {
 		ifstream myfile(name.c_str());
 		if (myfile.good()) {
+			myfile.close();
 			return true;
 		}
 		return false;
@@ -70,8 +74,9 @@ namespace Util {
 		if(ind.is_open()) {
 			while(ind.good()) {
 				getline(ind,line);
-				result += line + "\r\n";
+				result += line + "\n";
 			}
+			ind.close();
 			return result;
 		} else {
 			return "";
@@ -102,9 +107,9 @@ namespace Util {
 		ss << ll;
 		ss >> loglevel;
 		Util::log("Log level is set to " + ll);
-		parseVH();
 	    return true;
-	}	
+	}
+		
 	bool parseVH()
 	{
 		if (!exists("hosts.xml")) {
@@ -133,9 +138,66 @@ namespace Util {
 				Util::log("404 page: " + notFound);
 				hosts[name]=Host(name,docroot, notFound);
 			}
-			else
+			else 
+			{
 				hosts[name]=Host(name,docroot);
+			}
 		}
 		return true;
+	}
+	map<string,string> mimemap;
+	bool loadMime() {
+		//string s = getFile("/etc/mime.types"); //this could just be converted to a static map
+		if(!exists("mime.types")) {
+			return false;
+		}
+		//compress_on specifies that adjacent separators are combined into one, i.e \n\n\n becomes just one \n when parsing (that's what i take from output)
+		string result;
+		string line;
+		ifstream ind("mime.types");
+		if(ind.is_open()) {
+			while(ind.good()) {
+				getline(ind,line);
+				if(boost::starts_with(line,"#")) { //comments
+					continue;
+				}			
+				vector<string> t;
+				vector<string> tt;									
+				boost::split( t, line, boost::is_any_of("\t"), boost::token_compress_on );
+				if(t.size() > 1) {
+					boost::split(tt,t[1],boost::is_any_of(" "),boost::token_compress_on);
+					for(vector<string>::size_type j = 0; j < tt.size();j++) {
+					//	string temp1 = tt[j];
+						string temp = tt[j];
+						boost::algorithm::trim(temp);
+					//	cout << temp << endl;
+						mimemap[temp] = t[0];
+					}
+				}					
+			}
+			ind.close();
+		}
+		
+	//for(map<string,string>::iterator i = mimemap.begin();i != mimemap.end(); i++) {
+	//		cout << "ext:" << i->first << "<<>>" << i->second <<" :end" << endl;
+	//	}
+		return true;
+	}
+	template <typename U, typename K> bool keyExists(map<U,K> a, U look) { 
+		if(a.find(look)!=a.end()) {
+			return true;
+		}
+		return false;
+	}
+	string getMime(string filext) {
+		vector<string> v;
+		boost::split(v,filext,boost::is_any_of("."),boost::token_compress_on);
+		if(v.size()>1) {
+			string ext = v[v.size()-1];
+			if(keyExists(mimemap,ext)) {
+				return mimemap[ext];
+			}
+		}
+		return "application/octet-stream";
 	}
 }
