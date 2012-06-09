@@ -89,41 +89,52 @@ Response getResponse(Request req)
 Response::Response (string page, status_type status, string host)
 {
 	string root = Util::docroot;
+	bool moved = false;
 	string mime = "";
 	if(Util::hosts.find(host) != Util::hosts.end()) {
 		Util::log("vhost " + Util::hosts[host].getHost() + " found for " + host,2);
 		root = Util::hosts[host].getRoot();
+		moved = Util::hosts[host].moved[page];
 	} else {
 		Util::log("vhost not found for " + host,2);
 	}
 	string reqpage = root + page;
-	if(Util::exists(reqpage)) {
-		content = Util::getFile(reqpage);
+	if (!moved)
+	{
+		if(Util::exists(reqpage)) {
+			content = Util::getFile(reqpage);
 		Util::log(content);
 		mime=Util::getMime(page);
-	} else {
-		Util::log("Resource " + reqpage + " not found",2);
+		} else {
+			Util::log("Resource " + reqpage + " not found",2);
 		if(Util::hosts.find(host) != Util::hosts.end()){
 		if (Util::hosts[host].has404()) //apparently if hosts[host] didn't exist initially, this will set it, so subsequent requests will lead to a blank vhost, screwing up directories
-		{
-			reqpage = root + "/" + Util::hosts[host].getNotFound();
-			Util::log("Custom 404 available for " + host + ": " + reqpage, 2);
-			if (Util::exists(reqpage))
 			{
-				content = Util::getFile(reqpage);
+				reqpage = root + "/" + Util::hosts[host].getNotFound();
+				Util::log("Custom 404 available for " + host + ": " + reqpage, 2);
+				if (Util::exists(reqpage))
+				{
+					content = Util::getFile(reqpage);
 				mime=Util::getMime(page);
-			}
-			else
-			{
-				content = "404 Page Not Found. \r\nAdditionally a 404 Not Found error occured while getting the 404 Not Found Page.";
-				Util::log("The custom 404 for " + host + " was not found.");
+				}
+				else
+				{
+					content = "404 Page Not Found. \r\nAdditionally a 404 Not Found error occured while getting the 404 Not Found Page.";
+					Util::log("The custom 404 for " + host + " was not found.");
 				mime="text/plain";
+				}
 			}
 		}
-		}
-		else {
+		else 
+		{
 			content = "404 Page Not Found";
 			mime="text/plain";
+		}
+	}
+	else
+	{
+		status = Response::moved_permanently;
+		content = "410 Moved Permanently";
 		}
 	}
 	Util::log("Mime type is " + mime,1);
