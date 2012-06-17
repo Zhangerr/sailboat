@@ -151,6 +151,9 @@ namespace Util {
 		return true;
 	}
 	map<string,string> mimemap;
+	bool isLuaFile(string name) {
+		return boost::ends_with(name,".lua");
+	}
 	bool loadMime() {
 		//string s = getFile("/etc/mime.types"); //this could just be converted to a static map
 		if(!exists("mime.types")) {
