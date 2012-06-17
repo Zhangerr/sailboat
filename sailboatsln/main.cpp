@@ -15,8 +15,31 @@ using namespace std;
 using boost::asio::ip::tcp;
 
 //need to include content-length but it seems it is not sent by all servers
+//possible todos -- gets posts cookies
+//lua design -- go php style & just have globals with post/get params? or pass those as arguments (varargs or table)
 int main()
 {
+	
+/*	CLuaVirtualMachine vm;
+    vm.InitialiseVM ();
+	//vm.RunFile("test.lua");
+	//vm.RunFile("test1.lua");
+	//vm.DumpStack();
+	
+	   CMyScript ms (vm);
+	  // cout << ms.getI() << endl;
+	  // getchar();
+	 //  return 0;
+	 //  ms.getBuffer();
+   ms.CompileFile ("test.lua");
+      ms.SelectScriptFunction ("test");
+   ms.AddParam ("asd");
+   ms.AddParam("vds");
+   ms.AddParam("testo");
+   ms.AddParam("plsworko");
+   ms.AddParam(2.3f);
+   ms.Go ();
+      vm.DumpStack();*/
 	if(!Util::loadMime()) {
 		cerr << "Please make sure you have mimes.type in the working directory" << endl;
 		return -1;
@@ -28,7 +51,7 @@ int main()
     }
     if(!Util::parseVH()) {
     	cerr << "Could not find vhosts file! make sure hosts.xml is in the working directory" << endl;
-    	return -1;    	
+    //	return -1;    	
     }
     boost::asio::io_service is;
     tcp::acceptor acceptor(is, tcp::endpoint(tcp::v4(), Util::port)); //if port 80, must run as sudo

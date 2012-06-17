@@ -1,5 +1,46 @@
 #include "response.hpp"
+#include "lua/luavirtualmachine.h"
+#include "lua/luascript.h"
+#include "lua/luadebugger.h"
+#include "lua/lualib/luainc.h"
+
 //namespace copied and edited from http://www.boost.org/doc/libs/1_35_0/doc/html/boost_asio/example/http/server/reply.cpp
+
+   string buffer;
+   CMyScript::CMyScript (CLuaVirtualMachine& vm) : CLuaScript (vm)
+   {
+      m_iMethodBase = RegisterFunction ("echo");
+	  buffer = "";
+   }
+   string CMyScript::getBuffer() {
+		return buffer;
+   }
+   void CMyScript::setBuffer(string a) {
+		buffer = a;
+   }
+   void CMyScript::appendBuffer(string app) {
+		buffer+=app;
+   }
+   int CMyScript::ScriptCalling (CLuaVirtualMachine& vm, int iFunctionNumber)
+   {
+      switch (iFunctionNumber - m_iMethodBase)
+      {
+      case 0:
+         echo (vm);
+		 break;
+      }
+      return 0;
+   }
+
+   void CMyScript::echo (CLuaVirtualMachine& vm)
+   {
+//      printf ("Hellow (1)\n");
+	  const char *msg = lua_tostring ((lua_State *) vm, -1);
+	  appendBuffer(string(msg));
+      //return 0;
+   }
+   void CMyScript::HandleReturns(CLuaVirtualMachine& vm, const char *strFunc) {
+   }
 namespace status_strings {
 
 const std::string ok =
@@ -88,6 +129,9 @@ Response getResponse(Request req)
 
 Response::Response (string page, status_type status, string host)
 {
+	CLuaVirtualMachine vm;
+    vm.InitialiseVM ();
+	
 	string root = Util::docroot;
 	bool moved = false;
 	string mime = "";
@@ -103,8 +147,19 @@ Response::Response (string page, status_type status, string host)
 	{
 		if(Util::exists(reqpage)) 
 		{
+			if(Util::isLuaFile(reqpage)) {
+				Util::log("Executing lua script.",2);
+				CMyScript test(vm);
+				test.CompileFile (reqpage.c_str());
+				test.SelectScriptFunction ("main");
+				test.Go();			
+				vm.DumpStack(); //for debugging purposes, stack usually has error in it
+				content = test.getBuffer();
+			} else {
+			
 			content = Util::getFile(reqpage);
-			Util::log(content);
+			}
+			//Util::log(content);
 			mime=Util::getMime(page);
 		} 
 		else 
@@ -125,7 +180,7 @@ Response::Response (string page, status_type status, string host)
 					{
 						content = "404 Page Not Found. \r\nAdditionally a 404 Not Found error occured while getting the 404 Not Found Page.";
 						Util::log("The custom 404 for " + host + " was not found.");
-					mime="text/plain";
+						mime="text/plain";
 					}
 				}
 			}

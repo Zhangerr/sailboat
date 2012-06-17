@@ -19,6 +19,7 @@ namespace Util {
 	extern int loglevel;
 	std::string getMime(std::string);
 	bool loadMime();
+	bool isLuaFile(std::string);
 	extern map<string,string> mimemap;
 }
 #endif

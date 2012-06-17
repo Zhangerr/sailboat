@@ -1,6 +1,7 @@
 #include <string>
 #include "request.hpp"
 #include "Util.hpp"
+#include "lua/LuaScript.h"
 using namespace std;
 
 class Response {
@@ -34,4 +35,26 @@ class Response {
 		string getHeaders();
 		string getPage();
 };
+
 Response getResponse(Request);
+class CMyScript : public CLuaScript
+{
+	protected:
+   int m_iMethodBase;
+   string buffer;
+public:
+	CMyScript (CLuaVirtualMachine& vm);
+   string getBuffer();
+   void setBuffer(string a);
+   void appendBuffer(string app);
+   int ScriptCalling (CLuaVirtualMachine& vm, int iFunctionNumber);
+
+   void echo (CLuaVirtualMachine& vm);
+
+   int Hello2 (CLuaVirtualMachine& vm);
+
+   int Hello3 (CLuaVirtualMachine& vm);
+   void HandleReturns (CLuaVirtualMachine& vm, const char *strFunc);
+
+
+};
