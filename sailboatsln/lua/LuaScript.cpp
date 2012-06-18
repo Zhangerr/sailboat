@@ -110,7 +110,6 @@ static int LuaCallback (lua_State *lua)
 // None.
 //
 //============================================================================
-int count = 0;
 CLuaScript::CLuaScript (CLuaVirtualMachine& vm)
  : m_vm (vm), m_nMethods (0), m_iThisRef (0), m_nArgs (0)
 {
@@ -118,6 +117,8 @@ CLuaScript::CLuaScript (CLuaVirtualMachine& vm)
       // Create a reference to the "this" table. Each reference is unique
       lua_newtable (state);
       m_iThisRef = luaL_ref (state, LUA_REGISTRYINDEX);
+	/*Possible way of setting GETS array, need to dynamically construct from a map probably
+	  http://stackoverflow.com/questions/453769/how-do-i-create-a-lua-table-in-c-and-pass-it-to-a-lua-function 
 	  lua_newtable(state);
 	  int top = lua_gettop(state);
 	  lua_pushstring(state,"username");
@@ -131,7 +132,7 @@ CLuaScript::CLuaScript (CLuaVirtualMachine& vm)
 	  lua_settable(state,top);
 	  int test = luaL_ref(state,LUA_REGISTRYINDEX);
 	  lua_rawgeti(state, LUA_REGISTRYINDEX,test);
-	  lua_setglobal(state, "GETS");
+	  lua_setglobal(state, "GETS");*/
 /*	  if(count == 0) {
 		  	  lua_newtable(state);
 	  lua_pushnumber(state, ++count);

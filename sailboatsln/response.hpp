@@ -50,10 +50,6 @@ public:
    int ScriptCalling (CLuaVirtualMachine& vm, int iFunctionNumber);
 
    void echo (CLuaVirtualMachine& vm);
-
-   int Hello2 (CLuaVirtualMachine& vm);
-
-   int Hello3 (CLuaVirtualMachine& vm);
    void HandleReturns (CLuaVirtualMachine& vm, const char *strFunc);
 
 
