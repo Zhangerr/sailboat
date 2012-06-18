@@ -160,8 +160,8 @@ bool CLuaVirtualMachine::InitialiseVM (void)
 {
    // Open Lua!
    if (Ok ()) DestroyVM ();
-
-   m_pState = lua_open ();
+  
+   m_pState = luaL_newstate();
 
    if (m_pState) 
    {
@@ -174,8 +174,9 @@ bool CLuaVirtualMachine::InitialiseVM (void)
       luaopen_math (m_pState);
       luaopen_debug (m_pState);
       luaopen_io (m_pState);
-      luaopen_loadlib (m_pState);
-
+     // luaopen_loadlib (m_pState);
+	  luaL_openlibs(m_pState);
+	  
       // setup global printing (trace)
       lua_pushcclosure (m_pState, printMessage, 0);
       lua_setglobal (m_pState, "trace");
@@ -244,12 +245,29 @@ bool CLuaVirtualMachine::RunFile (const char *strFilename)
 
    if (fSuccess == false)
    {
-      if (m_pDbg != NULL) m_pDbg->ErrorRun (iErr);
+        if (m_pDbg != NULL) { m_pDbg->ErrorRun (iErr);} else {
+			  printf("Error executing function: %s\n", lua_tostring(m_pState,-1));
+		  }
    }
 
    return fSuccess;
 }
+bool CLuaVirtualMachine::RunString(const char* str) {
+	 bool fSuccess = false;
+   int iErr = 0;
+   if(luaL_dostring(m_pState,str) == 0) {
+	   fSuccess = true;
+   }
+ 
+   if (!fSuccess)
+   {
+        if (m_pDbg != NULL) { m_pDbg->ErrorRun (iErr);} else {
+			  printf("Error executing function: %s\n", lua_tostring(m_pState,-1));
+		  }
+   }
 
+   return fSuccess;
+}
 //============================================================================
 // bool CLuaVirtualMachine::RunBuffer 
 //---------------------------------------------------------------------------
@@ -312,7 +330,7 @@ bool CLuaVirtualMachine::RunBuffer (const unsigned char *pbBuffer, size_t szLen,
 bool CLuaVirtualMachine::CallFunction (int nArgs, int nReturns /* = 0 */)
 {
    bool fSuccess = false;
-   
+  //   DumpStack();
    if (lua_isfunction (m_pState, -nArgs-1))
    {
       int iErr = 0;
@@ -324,9 +342,13 @@ bool CLuaVirtualMachine::CallFunction (int nArgs, int nReturns /* = 0 */)
       }
       else
       {
-         if (m_pDbg != NULL) m_pDbg->ErrorRun (iErr);
+		  if (m_pDbg != NULL) { m_pDbg->ErrorRun (iErr);} else {
+			  printf("Error executing function: %s\n", lua_tostring(m_pState,-1));
+		  }
       }
-   }
+   } 
+	 
+   
 
    return fSuccess;
 }

@@ -151,9 +151,9 @@ Response::Response (string page, status_type status, string host)
 				Util::log("Executing lua script.",2);
 				CMyScript test(vm);
 				test.CompileFile (reqpage.c_str());
-				test.SelectScriptFunction ("main");
-				test.Go();			
-				vm.DumpStack(); //for debugging purposes, stack usually has error in it
+			//	test.SelectScriptFunction ("main");
+				test.main();		
+			//	vm.DumpStack(); //for debugging purposes, stack usually has error in it
 				content = test.getBuffer();
 			} else {
 			

@@ -31,7 +31,7 @@ public:
    // Load and run script elements
    bool RunFile (const char *strFilename);
    bool RunBuffer (const unsigned char *pbBuffer, size_t szLen, const char *strName = NULL);
-
+   bool RunString(const char * string);
    // C-Api into script
    bool CallFunction (int nArgs, int nReturns = 0);
 
