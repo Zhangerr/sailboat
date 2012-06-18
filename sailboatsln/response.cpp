@@ -153,7 +153,7 @@ Response::Response (string page, status_type status, string host)
 				test.CompileFile (reqpage.c_str());
 			//	test.SelectScriptFunction ("main");
 				test.main();		
-			//	vm.DumpStack(); //for debugging purposes, stack usually has error in it
+		//		vm.DumpStack(); //for debugging purposes, stack usually has error in it
 				content = test.getBuffer();
 			} else {
 			

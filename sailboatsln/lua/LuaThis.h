@@ -28,12 +28,12 @@ public:
       if (vm.Ok ())
       {
          // Save the old "this" table
-         lua_getglobal (state, "this");
+         lua_getglobal (state, "sb");
          m_iOldRef = luaL_ref (state, LUA_REGISTRYINDEX);
 
          // replace it with our new one
          lua_rawgeti(state, LUA_REGISTRYINDEX, iRef);
-         lua_setglobal (state, "this");
+         lua_setglobal (state, "sb");
       }
    }
 
@@ -44,7 +44,7 @@ public:
       {
          // Replace the old "this" table
          lua_rawgeti(state, LUA_REGISTRYINDEX, m_iOldRef);
-         lua_setglobal (state, "this");
+         lua_setglobal (state, "sb");
          luaL_unref (state, LUA_REGISTRYINDEX, m_iOldRef);
       }
    }
