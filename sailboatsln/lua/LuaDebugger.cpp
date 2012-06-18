@@ -64,7 +64,7 @@ static void LuaHook (lua_State *lua, lua_Debug *ar)
       LuaHookCall (lua);
       break;
    case LUA_HOOKRET:
-   case LUA_HOOKTAILRET:
+   case LUA_HOOKTAILCALL:
       LuaHookRet (lua);
       break;
    case LUA_HOOKLINE:

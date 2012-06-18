@@ -110,6 +110,7 @@ static int LuaCallback (lua_State *lua)
 // None.
 //
 //============================================================================
+int count = 0;
 CLuaScript::CLuaScript (CLuaVirtualMachine& vm)
  : m_vm (vm), m_nMethods (0), m_iThisRef (0), m_nArgs (0)
 {
@@ -117,12 +118,38 @@ CLuaScript::CLuaScript (CLuaVirtualMachine& vm)
       // Create a reference to the "this" table. Each reference is unique
       lua_newtable (state);
       m_iThisRef = luaL_ref (state, LUA_REGISTRYINDEX);
-
+	  lua_newtable(state);
+	  int top = lua_gettop(state);
+	  lua_pushstring(state,"username");
+	  lua_pushstring(state,"alex");
+	  lua_settable(state,top);
+	  lua_pushstring(state,"password");
+	  lua_pushstring(state,"default");
+	  lua_settable(state,top);
+	  lua_pushstring(state,"id");
+	  lua_pushstring(state,"2345");
+	  lua_settable(state,top);
+	  int test = luaL_ref(state,LUA_REGISTRYINDEX);
+	  lua_rawgeti(state, LUA_REGISTRYINDEX,test);
+	  lua_setglobal(state, "GETS");
+/*	  if(count == 0) {
+		  	  lua_newtable(state);
+	  lua_pushnumber(state, ++count);
+	  lua_pushnumber(state,count++);
+	  lua_settable(state,-3);
+	  lua_setglobal(state,"GET");
+	  }else {
+	  lua_pushnumber(state, ++count);
+	  lua_pushnumber(state,count++);
+	  lua_settable(state,);
+	  lua_setglobal(state,"GET");
+	  }*/
       // Save the "this" table to index 0 of the "this" table
       CLuaRestoreStack rs (vm);
       lua_rawgeti (state, LUA_REGISTRYINDEX, m_iThisRef);
       lua_pushlightuserdata (state, (void *) this);
       lua_rawseti (state, -2, 0);
+	  
    END_LUA_CHECK
 }
 
@@ -418,6 +445,12 @@ void CLuaScript::AddParam (float fFloat)
 // None.
 //
 //============================================================================
+void CLuaScript::main() {
+	assert (m_vm.Ok () && "VM Not OK");
+	lua_getglobal(m_vm,"main");
+	m_vm.CallFunction(0);
+	
+}
 bool CLuaScript::Go (int nReturns /* = 0 */)
 {
    assert (m_vm.Ok () && "VM Not OK");
@@ -426,7 +459,7 @@ bool CLuaScript::Go (int nReturns /* = 0 */)
    // Lua stack. Each function get a "this" parameter as default and is
    // pushed onto the stack when the method is selected
 
-   bool fSuccess = m_vm.CallFunction (m_nArgs + 1, nReturns);
+   bool fSuccess = m_vm.CallFunction (m_nArgs + 1, nReturns); //+1 for 'this' table
 
    if (fSuccess == true && nReturns > 0)
    {

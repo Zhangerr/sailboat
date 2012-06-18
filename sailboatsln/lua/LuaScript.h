@@ -42,7 +42,7 @@ public:
 
    // Checks on Virtual Machine script
    bool ScriptHasFunction (const char *strScriptName);
-
+   void main();
    // Method indexing check
    int methods (void) { return m_nMethods; }
    
