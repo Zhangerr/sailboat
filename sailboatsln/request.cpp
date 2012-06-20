@@ -3,6 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <stdio.h>
+#include <boost/algorithm/string.hpp>
 Request::Request (string h, string u) {
 	host = h;
 	uri = h + u;
@@ -28,11 +29,34 @@ Request::Request(string headers) {
 		char v[512];
 		sscanf(init.c_str(), "%s %s",v,creq);
 		string req(creq);
+		
 		verb = v;
 		if(string(req) == "/") {
 			req = "/index";
 		}				
+		
+		vector<string> temp;
+		boost::split(temp,req,boost::is_any_of("#"));//hash tags, discard for now
+		if(temp.size()>1) {
+			req = temp[0];
+		}
 		uri = req;
+		temp.clear();
+		//TODO : HANDLE PERCENT ENCODING
+		boost::split(temp,req, boost::is_any_of("?"));
+		if(temp.size() > 1) { //there is get params
+			string getp = temp[1];
+			uri = temp[0];
+			req = temp[0];
+			temp.clear();
+			boost::split(temp,getp, boost::is_any_of("&"));
+			vector<string> temp2;
+			for(vector<string>::size_type i = 0; i < temp.size(); i++) {
+				
+				boost::split(temp2,temp[i], boost::is_any_of("="));
+				GetParams[temp2[0]] = temp2[1];
+			}
+		}
 		if(Util::exists(Util::docroot + string(req))) { 				
 				status = Response::ok;
 		} else {

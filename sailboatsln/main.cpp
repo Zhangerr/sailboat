@@ -25,15 +25,19 @@ int main()
 		cerr << "Please make sure you have mimes.type in the working directory" << endl;
 		return -1;
 	}
-  //  cout << Util::getMime("test.xml") <<endl;
-    if(!Util::parseXml()) { //fixes segmentation fault
+    if(!Util::parseXml()) { //missing xml nodes usually cause segmentation faults because the pointer to the node = 0 and we attempt to dereference that
     	cerr << "Please make sure config.xml is located in the working directory and that it is readable." << endl;
     	return -1;
     }
-    if(!Util::parseVH()) {
+	if(Util::exists("hosts.xml")) { //vhosts should only be parsed if they exist, otherwise the server should be able to function still
+		Util::parseVH();
+	} else {
+		cout << "Could not find vhosts file" << endl;
+	}
+  /* if(!Util::parseVH()) {
     	cerr << "Could not find vhosts file! make sure hosts.xml is in the working directory" << endl;
     //	return -1;    	
-    }
+    }*/
     boost::asio::io_service is;
     tcp::acceptor acceptor(is, tcp::endpoint(tcp::v4(), Util::port)); //if port 80, must run as sudo
     while(true) {
@@ -51,7 +55,8 @@ int main()
 		Util::log(Util::make_daytime_string() + "\t" + sock.remote_endpoint().address().to_string() + "\t" + request.getVerb() + " " + request.getUri());
 		//static const boost::regex uriRegex("(?=/).*(?= HTTP)");	
 		//Request req (host, uri);
-		Response res = getResponse(request);
+		Response res = getResponse(request,request.GetParams);
+		
 		boost::asio::write(sock, boost::asio::buffer(res.getPage()), boost::asio::transfer_all(), err);		
 	}
 }

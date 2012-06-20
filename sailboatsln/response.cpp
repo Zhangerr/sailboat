@@ -120,14 +120,14 @@ string getStatus(Response::status_type status)
 }
 }
 bool returnContent = true;
-Response getResponse(Request req)
+Response getResponse(Request req,map<string,string> get)
 {		
 	if (req.getVerb() == "HEAD")
 		returnContent = false;
-	return Response(req.getUri(), (Response::status_type)req.status,req.getHost());
+	return Response(req.getUri(), (Response::status_type)req.status,req.getHost(),get);
 }
 
-Response::Response (string page, status_type status, string host)
+Response::Response (string page, status_type status, string host,map<string,string> get)
 {
 	CLuaVirtualMachine vm;
     vm.InitialiseVM ();
@@ -151,6 +151,7 @@ Response::Response (string page, status_type status, string host)
 				Util::log("Executing lua script.",2);
 				CMyScript test(vm);
 				test.CompileFile (reqpage.c_str());
+				test.AddGet(get);
 			//	test.SelectScriptFunction ("main");
 				test.main();		
 		//		vm.DumpStack(); //for debugging purposes, stack usually has error in it

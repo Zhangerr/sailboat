@@ -107,7 +107,7 @@ namespace Util {
 		string dr;
 		xml_node<>* drnode = cur_node->first_node("DocumentRoot");
 		if(drnode == NULL) {
-			Util::log("DocumentRoot node not found");
+			Util::log("DocumentRoot node not found, using current working directory.");
 			dr = ""; //current working directory
 			//return false;
 		} else {
@@ -116,30 +116,38 @@ namespace Util {
 	    Util::log("DocumentRoot:" + dr);
 	    docroot = dr;
 		xml_node<>* fxNode = cur_node->first_node("FileExtensions");
+		string fileExt;
 		if(fxNode == NULL) {
-			Util::log("FileExtensions node not found");
-			return false;
+			Util::log("FileExtensions node not found, using default");
+			fileExt="html|htm|lua";
+		} else {
+			fileExt = fxNode->value();
 		}
-		string fileExt = fxNode->value();
+		
 		Util::log("FileExtensions:" + fileExt);
 		fileExtensions = fileExt;	
 		xml_node<>* pN = cur_node->first_node("Port");
+		string portnum = pN->value();
 		if(pN == NULL) {
 			Util::log("Port node not found");
-			return false;
-		}
-		string portnum = pN->value();
+			portnum = "8080";
+		} else {
+			portnum = pN->value();
+		}		
 		stringstream ss(portnum);
 		ss >> port;	
 		Util::log("listening on port " + portnum);
 		ss.str("");
 		ss.clear();
 		xml_node<>* lN = cur_node->first_node("LogLevel");
+		string ll;
 		if(lN==NULL) {
-			Util::log("LogLevel node not found");
-			return false;
+			Util::log("LogLevel node not found");			
+			ll = "0";
+		} else {
+			ll = lN->value();
 		}
-		string ll = lN->value();
+		
 		ss << ll;
 		ss >> loglevel;
 		Util::log("Log level is set to " + ll);
@@ -148,10 +156,6 @@ namespace Util {
 		
 	bool parseVH()
 	{
-		if (!exists("hosts.xml")) {
-			Util::log("No hosts.xml found");
-			return false;
-		}
 		string xml = getFile("hosts.xml");
 		xml_document<> doc;
 		doc.parse<parse_declaration_node | parse_no_data_nodes>(&xml[0]);
@@ -184,6 +188,7 @@ namespace Util {
 			}
 			}
 		}
+
 		return true;
 	}
 	map<string,string> mimemap;
