@@ -58,7 +58,9 @@ namespace Util {
 	   	}
 	   	return "";
 	}
-	
+	/**
+	 * Check if a file exists
+	 */
 	bool exists(string name) {
 		ifstream myfile(name.c_str());
 		if (myfile.good()) {
@@ -82,28 +84,62 @@ namespace Util {
 			return "";
 		}
 	}
-	//http://www.ffuts.org/blog/quick-notes-on-how-to-use-rapidxml/
+	/**http://www.ffuts.org/blog/quick-notes-on-how-to-use-rapidxml/
+	 * TODO -- actually check for NULL's in case of segfaults
+	 * Current way of adding nodes is inefficient, perhaps consider making it use a for loop and a map instead that stores all the properties as keys
+	 * A problem would be integer based properties like port and log level
+	 *
+	 * Actually, instead of just returning false and exiting if there's an error, a better method would be to just use a default
+	 */
 	bool parseXml() {
 		if (!exists("config.xml")) {
 			return false;
 		}
 		string xml = getFile("config.xml");
 		xml_document<> doc;
+		
 		doc.parse<parse_declaration_node | parse_no_data_nodes>(&xml[0]);
 		xml_node<>* cur_node = doc.first_node("settings");
-	    string dr = cur_node->first_node("DocumentRoot")->value();
+		if(cur_node == NULL) {
+			Util::log("settings node not found");
+			return false;
+		}
+		string dr;
+		xml_node<>* drnode = cur_node->first_node("DocumentRoot");
+		if(drnode == NULL) {
+			Util::log("DocumentRoot node not found");
+			dr = ""; //current working directory
+			//return false;
+		} else {
+			 dr = drnode->value();
+		}
 	    Util::log("DocumentRoot:" + dr);
 	    docroot = dr;
-		string fileExt = cur_node->first_node("FileExtensions")->value();
+		xml_node<>* fxNode = cur_node->first_node("FileExtensions");
+		if(fxNode == NULL) {
+			Util::log("FileExtensions node not found");
+			return false;
+		}
+		string fileExt = fxNode->value();
 		Util::log("FileExtensions:" + fileExt);
 		fileExtensions = fileExt;	
-		string portnum = cur_node->first_node("Port")->value();
+		xml_node<>* pN = cur_node->first_node("Port");
+		if(pN == NULL) {
+			Util::log("Port node not found");
+			return false;
+		}
+		string portnum = pN->value();
 		stringstream ss(portnum);
 		ss >> port;	
 		Util::log("listening on port " + portnum);
 		ss.str("");
 		ss.clear();
-		string ll = cur_node->first_node("LogLevel")->value();
+		xml_node<>* lN = cur_node->first_node("LogLevel");
+		if(lN==NULL) {
+			Util::log("LogLevel node not found");
+			return false;
+		}
+		string ll = lN->value();
 		ss << ll;
 		ss >> loglevel;
 		Util::log("Log level is set to " + ll);
@@ -120,7 +156,7 @@ namespace Util {
 		xml_document<> doc;
 		doc.parse<parse_declaration_node | parse_no_data_nodes>(&xml[0]);
 		xml_node<>* node = doc.first_node("hosts");		
-		for(xml_node<>* i = node->first_node("VirtualHost"); i; i = i->next_sibling("VirtualHost")) {
+		for(xml_node<>* i = node->first_node("VirtualHost"); i != 0; i = i->next_sibling("VirtualHost")) {
 			Util::log("vhost found:");
 			string name = i->first_node("Name")->value();
 			if(port != 80) {
