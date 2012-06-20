@@ -2,6 +2,7 @@
 #include "request.hpp"
 #include "Util.hpp"
 #include "lua/LuaScript.h"
+#include <map>
 using namespace std;
 
 class Response {
@@ -30,13 +31,13 @@ class Response {
 			service_unavailable = 503
 		  } status;
 		string getContent();
-		Response(string, status_type,string);
+		Response(string, status_type,string,map<string,string>);
 		string generateHeaders(status_type,string);
 		string getHeaders();
 		string getPage();
 };
 
-Response getResponse(Request);
+Response getResponse(Request, map<string,string>);
 class CMyScript : public CLuaScript
 {
 	protected:

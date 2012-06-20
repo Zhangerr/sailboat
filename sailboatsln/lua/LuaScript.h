@@ -17,7 +17,9 @@
 
 #include "lualib/luainc.h"
 #include "luavirtualmachine.h"
-
+#include <map>
+#include <string>
+using namespace std;
 class CLuaScript
 {
 public:
@@ -33,6 +35,7 @@ public:
 
    // Selects a Lua Script function to call
    bool SelectScriptFunction (const char *strFuncName);
+   void AddGet(map<std::string,std::string>);
    void AddParam (int iInt);
    void AddParam (float fFloat);
    void AddParam (char *string);

@@ -154,6 +154,21 @@ CLuaScript::CLuaScript (CLuaVirtualMachine& vm)
    END_LUA_CHECK
 }
 
+void CLuaScript::AddGet(map<string,string> get) {
+		//for(map<string,string>::iterator i = mimemap.begin();i != mimemap.end(); i++) {
+	//		cout << "ext:" << i->first << "<<>>" << i->second <<" :end" << endl;
+	//	}
+	lua_State *state = (lua_State* ) m_vm;
+	lua_newtable(state);
+	int top = lua_gettop(state);
+	for(map<string,string>::iterator i = get.begin(); i != get.end(); i++) {
+		 lua_pushstring(state,i->first.c_str());
+		 lua_pushstring(state,i->second.c_str());
+		 lua_settable(state,top);
+	}
+	lua_setglobal(state,"GET");
+}
+
 //============================================================================
 // CLuaScript::~CLuaScript
 //---------------------------------------------------------------------------
