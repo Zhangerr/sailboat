@@ -21,5 +21,6 @@ namespace Util {
 	bool loadMime();
 	bool isLuaFile(std::string);
 	extern map<string,string> mimemap;
+	bool url_decode(std::string, std::string&);
 }
 #endif
