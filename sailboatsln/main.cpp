@@ -12,13 +12,17 @@
 #include "response.hpp"
 #include "Util.hpp"
 #include <vector>
+#include <boost/foreach.hpp>
+#include <boost/algorithm/string/regex.hpp>
+#define foreach         BOOST_FOREACH
 using namespace std;
 using boost::asio::ip::tcp;
 
-//need to include content-length but it seems it is not sent by all servers
-//possible todos -- gets posts cookies
-//lua design -- go php style & just have globals with post/get params? or pass those as arguments (varargs or table)
-//perhaps generate doxygen documentation?, use asserts
+/**need to include content-length but it seems it is not sent by all servers
+  *possible todos -- gets posts cookies
+  *lua design -- go php style & just have globals with post/get params? or pass those as arguments (varargs or table)
+  *perhaps generate doxygen documentation?, use asserts
+  */
 int main()
 {
 	
@@ -55,7 +59,14 @@ int main()
 		string str(buffer,l);		
 		vector<string> temp;
 		std::list<string> f;
-		cout << boost::contains(str,"\r\n") << endl;
+		vector< string > result;
+		boost::algorithm::split_regex( result, str, boost::regex( "\r\n\r\n" ) ) ;
+		//copy( result.begin(), result.end(), ostream_iterator<string>( cout, "\n" ) ) ;
+	//	foreach(string t, result) {
+		//	cout << "hm:" <<  t << endl;  
+		//} 
+		cout << result[1].length() << endl;
+	//	cout << boost::contains(str,"\r\n") << endl;
 		//boost::split(temp,str, //need split by \r\n http://stackoverflow.com/questions/7436968/boostsplit-using-whole-string-as-delimiter
 		Request request(str);
 		Util::log(Util::make_daytime_string() + "\t" + sock.remote_endpoint().address().to_string() + "\t" + request.getVerb() + " " + request.getUri());

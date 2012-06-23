@@ -11,8 +11,8 @@
 // AUTHOR               : Richard Shephard
 // ---------------------------------------------------------------------------
 // LIBRARY INCLUDE FILES
-#include "luaLib/luainc.h"
-#include "luavirtualmachine.h"
+#include "luainc.h"
+#include "LuaVirtualMachine.h"
 #include <assert.h>
 #include <string.h>
 #include <stdio.h>

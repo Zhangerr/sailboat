@@ -1,6 +1,6 @@
-function main()
+function main() 
 	--in the future, perhaps there should be COOKIES, POST, and GET declared as globals (or passed as arguments)
-	color=string.format("background-color:rgb(%s,%s,%s);",math.random(0,255),math.random(0,255),math.random(0,255))
+	color=string.format("background-color:rgb(%s,%s,%s);",math.random(0,255),math.random(0,255),math.random(0,255))		
 	sb:echo([[
 	<!DOCTYPE html>
 	<html>
@@ -12,13 +12,13 @@ function main()
 	html {
 	]] .. color ..
 	[[
-
+	
 	font-family:"Myriad Pro", sans-serif, Arial;
 	}
 	body {
-
+	
 		background-color:rgb(240,240,240);
-
+	
 		width:400px;
 		margin:auto;
 		padding:5px;
@@ -30,8 +30,15 @@ function main()
 	</head>
 	<body>
 	<div id="content">
+	<form name="input" action="" method="post">
+	Username: <input type="text" name="user" />
+	<input type="submit" value="Submit" />
+	</form>
 	~ hi ~ lua test ~ try refreshing me ~ <br /><br />
 	]])
+	for i,v in pairs(GET) do
+	sb:echo(i .. '=' .. v .. '<br />');
+	end
 	sb:echo([[<table
 	style="
 	border-color:grey;
@@ -43,13 +50,14 @@ function main()
 	" border=1
 	>]])
 	counter = 0
+	
 	for i,v in pairs(_ENV) do
 	counter = counter + 1
-	if counter % 2 == 0 then
+	if counter % 2 == 0 then 
 		sb:echo("<tr>")
 	else
 		sb:echo([[<tr style="background-color:lightgrey;">]])
-	end
+	end	
 	sb:echo("<td>")
 	sb:echo(tostring(i)) --find way to make it so auto converts to string
 	sb:echo("</td>")

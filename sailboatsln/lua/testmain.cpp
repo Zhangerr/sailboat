@@ -1,10 +1,10 @@
-#include "luavirtualmachine.h"
+/*#include "luavirtualmachine.h"
 #include "luascript.h"
 #include "luadebugger.h"
 #include "lualib/luainc.h"
 #include <assert.h>
 #include <stdio.h>
-#include <string.h>
+#include <string.h>*/
 
 
 /*class CMyScript : public CLuaScript

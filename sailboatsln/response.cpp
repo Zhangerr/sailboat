@@ -1,8 +1,8 @@
 #include "response.hpp"
-#include "lua/luavirtualmachine.h"
-#include "lua/luascript.h"
-#include "lua/luadebugger.h"
-#include "lua/lualib/luainc.h"
+#include "lua/LuaVirtualMachine.h"
+#include "lua/LuaScript.h"
+#include "lua/LuaDebugger.h"
+#include "lua/luainc.h"
 
 //namespace copied and edited from http://www.boost.org/doc/libs/1_35_0/doc/html/boost_asio/example/http/server/reply.cpp
 

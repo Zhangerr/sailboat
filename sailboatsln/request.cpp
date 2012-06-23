@@ -44,7 +44,6 @@ Request::Request(string headers) {
 		}
 		uri = req;
 		temp.clear();
-		//TODO : HANDLE PERCENT ENCODING
 		boost::split(temp,req, boost::is_any_of("?"));
 		if(temp.size() > 1) { //there is get params
 			string getp = temp[1];
