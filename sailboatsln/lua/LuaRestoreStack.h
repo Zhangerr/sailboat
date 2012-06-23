@@ -14,7 +14,7 @@
 #ifndef __LUA_RESTORE_STACK_H__
 #define __LUA_RESTORE_STACK_H__
 
-#include "lualib/luainc.h"
+#include "luainc.h"
 
 class CLuaRestoreStack
 {

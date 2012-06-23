@@ -18,9 +18,14 @@ namespace Util {
 	map<string,Host> hosts;
 	int port;
 	int loglevel = 1;
+	/**
+	Logs a message with a default level of 0
+	*/
 	void log(string a) {
 		log(a,0);
 	}
+	/**
+	*/
 	void log(string a, int lvl) {
 		if(loglevel>=lvl){
 			cout << a << endl;
@@ -90,6 +95,7 @@ namespace Util {
 	 * A problem would be integer based properties like port and log level
 	 *
 	 * Actually, instead of just returning false and exiting if there's an error, a better method would be to just use a default
+	 * @return false if parsing somehow failed
 	 */
 	bool parseXml() {
 		if (!exists("config.xml")) {

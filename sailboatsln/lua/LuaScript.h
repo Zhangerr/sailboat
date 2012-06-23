@@ -15,8 +15,8 @@
 #ifndef __LUA_SCRIPT_BASE_H__
 #define __LUA_SCRIPT_BASE_H__
 
-#include "lualib/luainc.h"
-#include "luavirtualmachine.h"
+#include "luainc.h"
+#include "LuaVirtualMachine.h"
 #include <map>
 #include <string>
 using namespace std;
@@ -59,8 +59,8 @@ public:
    CLuaVirtualMachine& vm (void) { return m_vm; }
 
 protected:
-   int m_nMethods;
-   CLuaVirtualMachine& m_vm;
+	CLuaVirtualMachine& m_vm;
+   int m_nMethods;   
    int m_iThisRef;
    int m_nArgs;
    const char *m_strFunctionName;
