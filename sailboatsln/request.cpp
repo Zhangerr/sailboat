@@ -29,7 +29,9 @@ Request::Request(string headers) {
 		char v[512];
 		sscanf(init.c_str(), "%s %s",v,creq);
 		string req(creq);
-		
+		string t;
+		Util::url_decode(req,t);
+		req = t;
 		verb = v;
 		if(string(req) == "/") {
 			req = "/index";
