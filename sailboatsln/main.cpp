@@ -11,6 +11,7 @@
 #include "request.hpp"
 #include "response.hpp"
 #include "Util.hpp"
+#include <vector>
 using namespace std;
 using boost::asio::ip::tcp;
 
@@ -49,8 +50,13 @@ int main()
 		//boost::array<char, 512> buffer;
 		//size_t l = boost::asio::read(sock, boost::asio::buffer(buffer, 512), boost::asio::transfer_all(), err);
 		char buffer [1024]; //is this liable to a buffer overflow exploit
+		
 	    size_t l = sock.read_some(boost::asio::buffer(buffer), err);
-		string str = buffer;
+		string str(buffer,l);		
+		vector<string> temp;
+		std::list<string> f;
+		cout << boost::contains(str,"\r\n") << endl;
+		//boost::split(temp,str, //need split by \r\n http://stackoverflow.com/questions/7436968/boostsplit-using-whole-string-as-delimiter
 		Request request(str);
 		Util::log(Util::make_daytime_string() + "\t" + sock.remote_endpoint().address().to_string() + "\t" + request.getVerb() + " " + request.getUri());
 		//static const boost::regex uriRegex("(?=/).*(?= HTTP)");	
