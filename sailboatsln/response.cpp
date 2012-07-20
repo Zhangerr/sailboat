@@ -156,12 +156,14 @@ Response::Response (string page, status_type status, string host,map<string,stri
 				test.main();		
 		//		vm.DumpStack(); //for debugging purposes, stack usually has error in it
 				content = test.getBuffer();
+				mime = "text/html";
 			} else {
 			
 			content = Util::getFile(reqpage);
+			mime=Util::getMime(page);
 			}
 			//Util::log(content);
-			mime=Util::getMime(page);
+			
 		} 
 		else 
 		{

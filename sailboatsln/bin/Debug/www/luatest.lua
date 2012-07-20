@@ -30,8 +30,9 @@ function main()
 	</head>
 	<body>
 	<div id="content">
-	<form name="input" action="" method="post">
+	<form name="input" action="" method="post" enctype="multipart/form-data">
 	Username: <input type="text" name="user" />
+<input type="file" name="file" id="file" /> 
 	<input type="submit" value="Submit" />
 	</form>
 	~ hi ~ lua test ~ try refreshing me ~ <br /><br />
