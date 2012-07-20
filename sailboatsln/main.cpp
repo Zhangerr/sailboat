@@ -35,14 +35,13 @@ int main()
     	return -1;
     }
 	if(Util::exists("hosts.xml")) { //vhosts should only be parsed if they exist, otherwise the server should be able to function still
-		Util::parseVH();
+		if(!Util::parseVH()) {
+			cerr << "Problem parsing virtual hosts file" << endl;
+			return -1;
+		}
 	} else {
-		cout << "Could not find vhosts file" << endl;
+		cout << "Could not find vhosts file." << endl;
 	}
-  /* if(!Util::parseVH()) {
-    	cerr << "Could not find vhosts file! make sure hosts.xml is in the working directory" << endl;
-    //	return -1;    	
-    }*/
     boost::asio::io_service is;
     tcp::acceptor acceptor(is, tcp::endpoint(tcp::v4(), Util::port)); //if port 80, must run as sudo
     while(true) {
@@ -54,9 +53,16 @@ int main()
 		//boost::array<char, 512> buffer;
 		//size_t l = boost::asio::read(sock, boost::asio::buffer(buffer, 512), boost::asio::transfer_all(), err);
 		char buffer [1024]; //is this liable to a buffer overflow exploit
-		
+	/*	boost::asio::socket_base::bytes_readable command(true);
+		sock.io_control(command);
+		cout << command.get() << endl;*/
+		while(true) {
 	    size_t l = sock.read_some(boost::asio::buffer(buffer), err);
-		string str(buffer,l);		
+	    string tmp(buffer,l);
+	    cout << tmp << endl;
+		}
+		string str(buffer);		
+		cout << str << endl;
 		vector<string> temp;
 		std::list<string> f;
 		vector< string > result;
@@ -65,7 +71,7 @@ int main()
 	//	foreach(string t, result) {
 		//	cout << "hm:" <<  t << endl;  
 		//} 
-		cout << result[1].length() << endl;
+		
 	//	cout << boost::contains(str,"\r\n") << endl;
 		//boost::split(temp,str, //need split by \r\n http://stackoverflow.com/questions/7436968/boostsplit-using-whole-string-as-delimiter
 		Request request(str);
